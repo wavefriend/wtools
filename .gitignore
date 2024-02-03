@@ -1,0 +1,5 @@
+bin/*
+build/*
+test/*
+src/private/__pycache__/
+*.spec
