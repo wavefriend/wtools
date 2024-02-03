@@ -42,17 +42,23 @@ def init_config(type, name, include_paths=[], lib_names=[], lib_paths=[]):
     if not "include-paths" in config:
         config["include-paths"] = include_paths
     else:
-        config['include-paths'] += include_paths
+        for include_path in include_paths:
+            if not include_path in config["include-paths"]:
+                config["include-paths"].append(include_path)
 
     if not "lib-names" in config:
         config["lib-names"] = lib_names
     else:
-        config["lib-names"] += lib_names
+        for lib_name in lib_names:
+            if not lib_name in config["lib-names"]:
+                config["lib-names"].append(lib_name)
 
     if not "lib-paths" in config:
         config["lib-paths"] = lib_paths
     else:
-        config["lib-paths"] += lib_paths
+        for lib_path in lib_paths:
+            if not lib_path in config["lib-paths"]:
+                config["lib-paths"].append(lib_path)
 
     if len(config) > 6:
         sys.exit("Config has extra entries.")
@@ -97,7 +103,7 @@ def check_config():
 
     check_type(config["type"])
 
-    if not config["target"].beginswith(config["name"]):
+    if not config["target"].startswith(config["name"]):
         sys.exit("Target name does not match environment name.")
 
     if not config["target"].endswith(get_ext(config["type"])):
