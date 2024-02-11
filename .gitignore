@@ -1,5 +1,6 @@
 bin/*
 build/*
 test/*
+src/__pycache__/
 src/private/__pycache__/
 *.spec

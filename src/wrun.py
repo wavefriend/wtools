@@ -13,4 +13,7 @@ def run():
     subprocess.run(["bin/" + config["target"]])
 
 if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        sys.exit("Too many arguments.")
+
     run()

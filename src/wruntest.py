@@ -3,7 +3,7 @@ import sys
 import private.private as private
 import wrun
 
-def maketest():
+def runtest():
     private.check_environment()
 
     config = private.read_config()
@@ -17,4 +17,7 @@ def maketest():
         sys.exit("Can only run test in library or test environment.")
 
 if __name__ == "__main__":
-    maketest()
+    if len(sys.argv) > 1:
+        sys.exit("Too many arguments.")
+
+    runtest()
