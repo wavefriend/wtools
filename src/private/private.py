@@ -39,6 +39,9 @@ def init_config(type, name, include_paths=[], lib_names=[], lib_paths=[]):
     elif config["target"] != name + get_ext(type):
         sys.exit("The existing environment has a different target.")
 
+    if not "c++" in config:
+        config["c++"] = 20
+
     if not "include-paths" in config:
         config["include-paths"] = include_paths
     else:
@@ -60,7 +63,7 @@ def init_config(type, name, include_paths=[], lib_names=[], lib_paths=[]):
             if not lib_path in config["lib-paths"]:
                 config["lib-paths"].append(lib_path)
 
-    if len(config) > 6:
+    if len(config) > 7:
         sys.exit("Config has extra entries.")
 
     with open("wconfig.json", 'w') as file:
@@ -94,11 +97,11 @@ def check_config():
     with open("wconfig.json", 'r') as file:
         config = json.load(file)
 
-    for key in ["type", "name", "target", "include-paths", "lib-names", "lib-paths"]:
+    for key in ["type", "name", "target", "c++", "include-paths", "lib-names", "lib-paths"]:
         if not key in config:
             sys.exit("Config is missing a " + key)
 
-    if len(config) > 6:
+    if len(config) > 7:
         sys.exit("Config has extra entries.")
 
     check_type(config["type"])

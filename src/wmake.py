@@ -3,6 +3,10 @@ import sys
 import subprocess
 import private.private as private
 
+# todo: having no target will trigger all cpps to be rebuilt
+#       even though thats not strictly necessary
+#       maybe we should compare hpps to o files instead
+
 def is_file_more_recent(check_path, control_path):
     try:
         # Get the modification time of each file
@@ -54,20 +58,26 @@ def get_o_path(cpp_path):
     return os.path.join(build_path, file_name + '.o')
 
 def should_compile_all_cpp(hpp_paths, target_path):
+    # If target_path does not exist everything should be compiled
+    if not os.path.exists(target_path):
+        return True
+
+    # Check if at least one .hpp is more recent than target
     for hpp_path in hpp_paths:
         if is_file_more_recent(hpp_path, target_path):
             return True
+
     return False
 
 def should_compile_cpp_to_o(cpp_path, o_path):
-    # If o_path does not exist compile it
+    # If o_path does not exist it should be compiled
     if not os.path.exists(o_path):
         return True
 
     # If cpp_path is more recent than o_path compile it
     return is_file_more_recent(cpp_path, o_path)
 
-def compile_cpp_to_o(cpp_path, o_path, include_paths):
+def compile_cpp_to_o(cpp_version, cpp_path, o_path, include_paths):
     # Create the build path structure for o_path
     build_path = os.path.dirname(o_path)
     os.makedirs(build_path, exist_ok=True)
@@ -76,11 +86,11 @@ def compile_cpp_to_o(cpp_path, o_path, include_paths):
     include_paths_str = ' '.join(['-I' + include_path for include_path in include_paths])
 
     # Compile the .cpp file to a .o file
-    command = f'g++ -c {cpp_path} -o {o_path} {include_paths_str}'
+    command = f'g++ -std=c++{cpp_version} -c {cpp_path} -o {o_path} {include_paths_str}'
     subprocess.run(command, shell=True, check=True)
     print(f'{cpp_path} compiled to {o_path}.')
 
-def compile_and_link(target, include_paths, lib_names, lib_paths):
+def compile_and_link(target, cpp_version, include_paths, lib_names, lib_paths):
     # Get paths to the .cpp files, .hpp files, and target
     cpp_paths = find_cpp_paths()
     hpp_paths = find_hpp_paths()
@@ -103,7 +113,7 @@ def compile_and_link(target, include_paths, lib_names, lib_paths):
 
         # Compile .cpp file if a .hpp file changed or the .cpp is newer than the .o
         if should_compile_all or should_compile_cpp_to_o(cpp_path, o_path):
-            compile_cpp_to_o(cpp_path, o_path, include_paths)
+            compile_cpp_to_o(cpp_version, cpp_path, o_path, include_paths)
             o_path_compiled = True
 
     # Tell user which o_paths exist but aren't being used in target
@@ -124,12 +134,12 @@ def compile_and_link(target, include_paths, lib_names, lib_paths):
     # Determine if building a DLL or an executable based on the specified file name
     if target.endswith('.dll'):
         # Construct the link command for building a DLL
-        command = f'g++ -shared -o {target_path} {o_paths_str} {lib_names_str} {lib_paths_str}'
+        command = f'g++ -std=c++{cpp_version} -shared -o {target_path} {o_paths_str} {lib_names_str} {lib_paths_str}'
         subprocess.run(command, shell=True, check=True)
         print(f'DLL built successfully as {target_path}')
     elif target.endswith('.exe'):
         # Construct the link command for building an executable
-        command = f'g++ -o {target_path} {o_paths_str} {lib_names_str} {lib_paths_str}'
+        command = f'g++ -std=c++{cpp_version} -o {target_path} {o_paths_str} {lib_names_str} {lib_paths_str}'
         subprocess.run(command, shell=True, check=True)
         print(f'Executable built successfully as {target_path}')
     else:
@@ -143,7 +153,7 @@ def make():
     if not "include" in config["include-paths"]:
         config["include-paths"].append("include")
 
-    compile_and_link(config["target"], config["include-paths"], config["lib-names"], config["lib-paths"])
+    compile_and_link(config["target"], config["c++"], config["include-paths"], config["lib-names"], config["lib-paths"])
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:

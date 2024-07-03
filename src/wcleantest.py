@@ -1,20 +1,23 @@
 import os
 import sys
 import private.private as private
-import wrun
+import wclean
 
-def runtest(args=[]):
+def cleantest():
     private.check_environment()
 
     config = private.read_config()
 
     if config["type"] == "library":
         os.chdir("test")
-        wrun.run(args)
+        wclean.clean()
     elif config["type"] == "test":
-        wrun.run(args)
+        wclean.clean()
     else:
-        sys.exit("Can only run test in library or test environment.")
+        sys.exit("Can only clean test in library or test environment.")
 
 if __name__ == "__main__":
-    runtest(sys.argv[1:len(sys.argv)])
+    if len(sys.argv) > 1:
+        sys.exit("Too many arguments.")
+
+    cleantest()

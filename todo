@@ -1,0 +1,21 @@
+entry argument for wmake, wmaketest, wrun, and wruntest
+does nothing
+we need a way to automate removing the main function and
+making the entry method named main
+maybe tests should not be allowed to have main and programs
+have to have main and then we auto add main to the test when
+building
+
+organize all the code
+
+currently it seems to rebuild all the .o files if one fails
+because its comparing the cpps against the .exe when the
+cpps should be compared against their .o files
+
+make whelp more detailed
+write that the path to each library dll needs to be added
+to the system environment variables in order to build and run
+stuff using those dlls
+
+a rebuild should trigger if there has been a change in the
+config file
