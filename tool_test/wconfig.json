@@ -1,0 +1,9 @@
+{
+    "type": "library",
+    "name": "hello",
+    "target": "hello.dll",
+    "c++": 20,
+    "include-paths": [],
+    "lib-names": [],
+    "lib-paths": []
+}

@@ -1,0 +1,15 @@
+{
+    "type": "test",
+    "name": "test",
+    "target": "test.exe",
+    "c++": 20,
+    "include-paths": [
+        "../include"
+    ],
+    "lib-names": [
+        "hello"
+    ],
+    "lib-paths": [
+        "../bin"
+    ]
+}
