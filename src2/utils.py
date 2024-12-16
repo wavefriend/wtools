@@ -4,6 +4,26 @@
 import json
 import os
 
+## Return whether there is a file or directory at 'path'.
+def path_exists(path: str) -> str:
+    return os.path.exists(path)
+
+## Return 'path' but with the appropriate / or \ for the current platform.
+def fix_path(path: str) -> str:
+    # TODO consider OS other than Windows
+
+    return path.replace("/", "\\")
+
+## Return each path in 'paths' but with the appropriate / or \ for the current platform.
+def fix_path_list(paths: list) -> list:
+    # TODO consider OS other than Windows
+
+    fixed_paths = []
+    for path in paths:
+        fixed_paths.append(fix_path(path))
+
+    return fixed_paths
+
 ## Join 'root_path' and 'sub_path'.
 def add_paths(root_path: str, sub_path: str) -> str:
     return os.path.join(root_path, sub_path)
@@ -33,6 +53,10 @@ def subtract_paths_list(full_paths: list, root_path: str) -> list:
 ## Returns the extension of 'file_path' with the dot.
 def get_file_extension(file_path: str) -> str:
     return os.path.splitext(file_path)[1]
+
+## Return the last time 'file_path' was modified.
+def get_file_last_modified_time(file_path: str) -> str:
+    return os.path.getmtime(file_path)
 
 ## Return paths to all files directly under 'dir_path'.
 ## Returned paths are relative to 'dir_path'.
