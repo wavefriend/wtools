@@ -3,6 +3,7 @@
 
 import json
 import os
+import subprocess
 
 ## Return whether there is a file or directory at 'path'.
 def path_exists(path: str) -> str:
@@ -54,6 +55,15 @@ def subtract_paths_list(full_paths: list, root_path: str) -> list:
 def delete_path(path: str) -> None:
     if path_exists(path):
         os.remove(path)
+
+## Return the path to the directory that 'file_path' lives in.
+def get_file_directory(file_path: str) -> str:
+    return os.path.dirname(file_path)
+
+## Create all the directories needed to make 'dir_path' a valid
+## directory path.
+def create_directory(dir_path: str) -> None:
+    os.makedirs(dir_path, exist_ok=True)
 
 ## Returns the extension of 'file_path' with the dot.
 def get_file_extension(file_path: str) -> str:
@@ -171,3 +181,7 @@ def read_json_dict(json_file_path: str) -> dict:
 def write_json_dict(json_file_path: str, dict: dict) -> None:
     with open(json_file_path, 'w') as file:
         json.dump(dict, file)
+
+## Run 'command' from the working directory.
+def run_command(command: str) -> None:
+    subprocess.run(command, shell=True, check=True)
