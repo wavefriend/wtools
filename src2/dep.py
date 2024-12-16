@@ -5,6 +5,8 @@ import re
 import utils
 
 # TODO need to handle included cpps
+# TODO stop the dep search when you find a time before a certain threshold
+#      instead of just finding the most recent time
 
 class DepGraph:
 
@@ -12,6 +14,8 @@ class DepGraph:
 
     ## We search for hpp file locations in the order of the entries in this list.
     include_dir_paths: list
+
+    cpp_paths: list
 
     ## Maps hpps and cpps to their includes.
     up: dict = {}
@@ -25,10 +29,10 @@ class DepGraph:
 
         # Get cpp paths in a usable format
         rel_cpp_paths = utils.get_files_deep(src_dir_path, [".cpp"])
-        cpp_paths = utils.add_paths_list(src_dir_path, rel_cpp_paths)
+        self.cpp_paths = utils.add_paths_list(src_dir_path, rel_cpp_paths)
 
         # Add cpp paths
-        for cpp_path in cpp_paths:
+        for cpp_path in self.cpp_paths:
             self._add_cpp(cpp_path)
 
     def _add_cpp(self, cpp_path: str) -> None:
@@ -76,10 +80,44 @@ class DepGraph:
 
         return hpp_paths
 
-    ## Returns a map of cpp paths to the last times they or one of the hpp paths
+    ## Returns the most recent time 'cpp_path' or one of the hpp paths it depends on
+    ## were modified.
+    def _get_cpp_last_modified_time(self, cpp_path: str) -> float:
+        last_modified_time = utils.get_file_last_modified_time(cpp_path)
+
+        for included_hpp_path in self.up[cpp_path]:
+            time = self._get_hpp_last_modified_time(included_hpp_path)
+
+            if time > last_modified_time:
+                last_modified_time = time
+
+        return last_modified_time
+
+    ## Returns the most recent time 'hpp_path' or one of the hpp paths it depends on
+    ## were modified.
+    def _get_hpp_last_modified_time(self, hpp_path: str) -> float:
+        last_modified_time = utils.get_file_last_modified_time(hpp_path)
+
+        for included_hpp_path in self.up[hpp_path]:
+            time = self._get_hpp_last_modified_time(included_hpp_path)
+
+            if time > last_modified_time:
+                last_modified_time = time
+
+        return last_modified_time
+
+    def get_cpp_paths(self) -> list:
+        return self.cpp_paths
+
+    ## Returns a map of cpp paths to the most recent times they or one of the hpp paths
     ## they depend on were modified.
-    def get_cpp_last_modified_times() -> dict:
-        return {}
+    def get_cpp_last_modified_times(self) -> dict:
+        last_modified_times = {}
+
+        for cpp_path in self.cpp_paths:
+            last_modified_times[cpp_path] = self._get_cpp_last_modified_time(cpp_path)
+
+        return last_modified_times
 
     def __str__(self) -> str:
         result = ""

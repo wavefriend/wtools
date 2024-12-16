@@ -50,9 +50,19 @@ def subtract_paths_list(full_paths: list, root_path: str) -> list:
 
     return new_paths
 
+## Delete file or directory at 'path' if it exists.
+def delete_path(path: str) -> None:
+    if path_exists(path):
+        os.remove(path)
+
 ## Returns the extension of 'file_path' with the dot.
 def get_file_extension(file_path: str) -> str:
     return os.path.splitext(file_path)[1]
+
+## Return 'file_path' with the file extension replaced with 'file_extension'.
+## 'file_extension' must be provided with the dot.
+def replace_file_extension(file_path: str, file_extension: str) -> str:
+    return file_path.replace(get_file_extension(file_path), file_extension)
 
 ## Return the last time 'file_path' was modified.
 def get_file_last_modified_time(file_path: str) -> str:
