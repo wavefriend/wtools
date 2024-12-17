@@ -1,0 +1,19 @@
+{
+    "c++": 20,
+    "directories": {
+        "include": "include",
+        "src": "src",
+        "main": "main",
+        "test": "test",
+        "build-src": "build/src",
+        "build-main": "build/main",
+        "build-test": "build/test",
+        "bin": "bin"
+    },
+    "targets": {
+        "src": "myLibrary.dll",
+        "main": "myProgram.exe"
+    },
+    "dependencies": [
+    ]
+}

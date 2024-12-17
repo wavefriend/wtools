@@ -1,6 +1,11 @@
 import dep
 import utils
 
+# TODO support cpp files that are being included
+#      especially when they exist in main and test folders
+# TODO do we need separate consider_compile and compile functions?
+# TODO be consistent about using the f'' syntax or not
+
 def cpp_to_o(src_dir_path: str, build_dir_path: str, cpp_path: str) -> str:
     return utils.replace_file_extension(utils.add_paths(build_dir_path, utils.subtract_paths(cpp_path, src_dir_path)), ".o")
 
