@@ -1,0 +1,28 @@
+{
+    "settings": {
+        "c++": 20,
+        "static": {
+            "src": false,
+            "main": false,
+            "test": false
+        }
+    },
+    "directories": {
+        "include": "include",
+        "src": "src",
+        "main": "main",
+        "test": "test",
+        "build": "build",
+        "bin": "bin"
+    },
+    "dependencies": {
+        "src": [],
+        "main": [],
+        "test": []
+    },
+    "targets": {
+        "src": "myTarget.dll",
+        "main": "myTarget.exe",
+        "test": "test.exe"
+    }
+}
