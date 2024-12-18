@@ -16,6 +16,7 @@
     },
     "dependencies": {
         "src": [
+            "testWmath"
         ],
         "main": [
         ],

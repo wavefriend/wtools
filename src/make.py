@@ -14,6 +14,7 @@ import utils
 # TODO possibly combine config and extern into one python object
 # TODO print something out when nothing is changed to say nothing needed to change
 # TODO we need to trigger a complete rebuild if wconfig or wextern is changed
+# TODO should extern be split up by main/src/test? should config not be?
 
 # TODO move
 CONFIG = "wconfig.json"
@@ -23,6 +24,8 @@ def make_src(config: dict, extern: dict) -> None:
     cpp_version = config["c++"]
 
     include_dir_paths = [config["directories"]["include"]] + extern["include-paths"]
+    lib_names = config["dependencies"]["src"]
+    lib_dir_paths = extern["lib-paths"]
     src_dir_path = config["directories"]["src"]
     build_dir_path = config["directories"]["build-src"]
     bin_dir_path = config["directories"]["bin"]
@@ -30,7 +33,9 @@ def make_src(config: dict, extern: dict) -> None:
     target_name = config["targets"]["src"]
     target_path = utils.add_paths(bin_dir_path, target_name)
 
-    compile_and_link.compile_and_link(cpp_version, True, False, src_dir_path, include_dir_paths, build_dir_path, target_path)
+    compile_and_link.compile_and_link(cpp_version, True, False, \
+                                      src_dir_path, include_dir_paths, lib_names, lib_dir_paths, \
+                                      build_dir_path, target_path)
 
 # TODO needs to include the dll from src
 def make_main(config: dict, extern: dict) -> None:
@@ -39,6 +44,8 @@ def make_main(config: dict, extern: dict) -> None:
     cpp_version = config["c++"]
 
     include_dir_paths = [config["directories"]["include"]] + extern["include-paths"]
+    lib_names = config["dependencies"]["src"] + config["dependencies"]["main"]
+    lib_dir_paths = [config["directories"]["bin"]] + extern["lib-paths"]
     src_dir_path = config["directories"]["main"]
     build_dir_path = config["directories"]["build-main"]
     bin_dir_path = config["directories"]["bin"]
@@ -46,7 +53,9 @@ def make_main(config: dict, extern: dict) -> None:
     target_name = config["targets"]["main"]
     target_path = utils.add_paths(bin_dir_path, target_name)
 
-    compile_and_link.compile_and_link(cpp_version, False, False, src_dir_path, include_dir_paths, build_dir_path, target_path)
+    compile_and_link.compile_and_link(cpp_version, False, False, \
+                                      src_dir_path, include_dir_paths, lib_names, lib_dir_paths, \
+                                      build_dir_path, target_path)
 
 # TODO needs to include the dll from src
 def make_test(config: dict, extern: dict) -> None:
@@ -55,6 +64,8 @@ def make_test(config: dict, extern: dict) -> None:
     cpp_version = config["c++"]
 
     include_dir_paths = [config["directories"]["include"]] + extern["include-paths"]
+    lib_names = config["dependencies"]["src"] + config["dependencies"]["test"]
+    lib_dir_paths = [config["directories"]["bin"]] + extern["lib-paths"]
     src_dir_path = config["directories"]["test"]
     build_dir_path = config["directories"]["build-test"]
     bin_dir_path = config["directories"]["bin"]
@@ -62,7 +73,9 @@ def make_test(config: dict, extern: dict) -> None:
     target_name = "test.exe"
     target_path = utils.add_paths(bin_dir_path, target_name)
 
-    compile_and_link.compile_and_link(cpp_version, False, False, src_dir_path, include_dir_paths, build_dir_path, target_path)
+    compile_and_link.compile_and_link(cpp_version, False, False, \
+                                      src_dir_path, include_dir_paths, lib_names, lib_dir_paths, \
+                                      build_dir_path, target_path)
 
 ## This is the behavior of wmake.
 if __name__ == "__main__":

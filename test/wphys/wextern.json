@@ -1,5 +1,8 @@
 {
     "include-paths": [
         "../wmath/include"
+    ],
+    "lib-paths": [
+        "../wmath/bin"
     ]
 }
