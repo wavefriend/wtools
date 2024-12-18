@@ -1,0 +1,25 @@
+{
+    "c++": 20,
+    "directories": {
+        "include": "include",
+        "src": "src",
+        "main": "main",
+        "test": "test",
+        "build-src": "build/src",
+        "build-main": "build/main",
+        "build-test": "build/test",
+        "bin": "bin"
+    },
+    "targets": {
+        "src": "testWmath.dll",
+        "main": "testWmath.exe"
+    },
+    "dependencies": {
+        "src": [
+        ],
+        "main": [
+        ],
+        "test": [
+        ]
+    }
+}

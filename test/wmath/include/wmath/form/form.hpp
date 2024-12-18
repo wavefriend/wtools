@@ -3,3 +3,5 @@
 
 // stuff
 // stuff
+
+void doSomething();

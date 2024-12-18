@@ -1,6 +1,4 @@
-bin/*
-build/*
-test/*
-src/__pycache__/
-src/private/__pycache__/
+*/bin/*
+*/build/*
+*/__pycache__/*
 *.spec

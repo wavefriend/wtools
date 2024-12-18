@@ -1,0 +1,5 @@
+{
+    "include-paths": [
+        "../wmath/include"
+    ]
+}

@@ -13,6 +13,7 @@ import utils
 # TODO find some way to move all this repetition into helpers
 # TODO possibly combine config and extern into one python object
 # TODO print something out when nothing is changed to say nothing needed to change
+# TODO we need to trigger a complete rebuild if wconfig or wextern is changed
 
 # TODO move
 CONFIG = "wconfig.json"

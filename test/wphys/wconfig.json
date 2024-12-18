@@ -11,9 +11,15 @@
         "bin": "bin"
     },
     "targets": {
-        "src": "myLibrary.dll",
-        "main": "myProgram.exe"
+        "src": "testWphys.dll",
+        "main": "testWphys.exe"
     },
-    "dependencies": [
-    ]
+    "dependencies": {
+        "src": [
+        ],
+        "main": [
+        ],
+        "test": [
+        ]
+    }
 }
